@@ -1,5 +1,10 @@
 package kz.tansh.fileuploader.service;
 
+import ch.qos.logback.core.util.FileSize;
+import kz.tansh.fileuploader.exceptions.IllegalFileException;
+import kz.tansh.fileuploader.exceptions.IllegalFileSizeException;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -28,6 +33,21 @@ public class FileConfigs {
     System.out.println(" :: checkFileExtensionNotAllowed: isNotAllowed: " + isNotAllowed);
     System.out.println(" :: checkFileExtensionNotAllowed: isEmpty: " + isEmpty);
     return isEmpty || isNotAllowed;
+  }
+  static void validateFile(MultipartFile file) {
+
+    if (file.isEmpty()) {
+      throw new IllegalFileException("Ошибка, загружен пустой файл");
+    }
+
+    if (file.getSize() > FileSize.MB_COEFFICIENT * 2) {
+      throw new IllegalFileSizeException();
+    }
+
+    String filename = file.getOriginalFilename();
+    if (FileConfigs.checkFileExtensionNotAllowed(filename)) {
+      throw new IllegalFileException("Недопустимый формат загружаемого файла, " + FileConfigs.getFileExtension(filename));
+    }
   }
 
 }

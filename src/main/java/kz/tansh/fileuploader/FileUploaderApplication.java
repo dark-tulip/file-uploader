@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FileUploaderApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(FileUploaderApplication.class, args);
+
 	}
 
 }
